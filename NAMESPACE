@@ -1,0 +1,7 @@
+export(flanner)
+export(fromDataFrame)
+export(knn.lookup.rows)
+export(lookupKNNDataFrame)
+exportPattern("^[[:alpha:]]+")
+importFrom(Rcpp,evalCpp)
+useDynLib(flanner)
