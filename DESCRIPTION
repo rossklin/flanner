@@ -2,6 +2,8 @@ Package: flanner
 Type: Package
 Title: Approximate nearest neighbours queries
 Version: 0.1
+Author: Tilo Wiklund <tilo@wiklund.co>
+Maintainer: Tilo Wiklund <tilo@wiklund.co>
 Authors@R: "Tilo Wiklund <tilo@wiklund.co> [aut, cre]"
 Description: Wrapper around FLANN for peforming (approximate) nearest neighbour
     queries.

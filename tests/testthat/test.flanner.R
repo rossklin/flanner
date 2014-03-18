@@ -10,17 +10,17 @@ expected.index <- c(4315, 5907, 8497, 7656, 8060, 4361, 1294, 7269, 1500, 8445, 
 #expected.distance <- c(0.023777863, 0.02939512, 0.03467671, 0.03632639, 0.04516371, 0.05262052, 0.05309608, 0.05621594, 0.05970151, 0.06230218, 0.012517320, 0.02543950, 0.03570553, 0.03713558, 0.04281672, 0.04307229, 0.04547842, 0.06392136, 0.06534280, 0.06538633, 0.008412378, 0.03306358, 0.03375904, 0.03614532, 0.04117221, 0.04257510, 0.04294894, 0.04683583, 0.04753219, 0.05025776)
 expected.distance <- c(0.023777863, 0.029395117, 0.034676710, 0.036326386, 0.045163708, 0.052620522, 0.053096077, 0.056215940, 0.059701512, 0.062302181, 0.012517320, 0.025439502, 0.035705529, 0.037135576, 0.042816720, 0.043072293, 0.045478418, 0.063921361, 0.065342797, 0.065386328, 0.008412378, 0.033063581, 0.033759037, 0.036145323, 0.041172207, 0.042575103, 0.042948938, 0.046835826, 0.047532191, 0.050257756)
 
-actual.observed <- knn.lookup.rows(flanner(test.data), test.query, 10)
+actual.observed <- knn_lookup_rows(flanner(test.data), test.query, 10)
 
 expect_equivalent(actual.observed, expected.index)
 expect_equivalent(sqrt(attr(actual.observed, "distance")), expected.distance)
 
-actual.observed <- knn.lookup.rows(flanner(test.data), test.query, 10, square.distance=FALSE)
+actual.observed <- knn_lookup_rows(flanner(test.data), test.query, 10, square.distance=FALSE)
 expect_equivalent(actual.observed, expected.index)
 expect_equivalent(attr(actual.observed, "distance"), expected.distance)
 
 test.query2 <- data.frame(test.query, d=1:3)
-actually.observed <- knn.lookup(flanner(test.data), test.query2, 10, distance.name="ddd")
+actually.observed <- knn_lookup(flanner(test.data), test.query2, 10, distance.name="ddd")
 expect_equivalent(actually.observed$d, rep(1:3, each=10))
 expect_equivalent(actually.observed[,1:3], test.data[expected.index[1:30],])
 expect_equivalent(sqrt(actually.observed$ddd), expected.distance)

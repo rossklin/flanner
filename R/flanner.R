@@ -36,11 +36,11 @@
 #' @param df data.frame containing points
 #' @param cols columns with respect to which to do lookups (defaults to all columns)
 #' @param may.contain.NA whether the data.frame can contain incomplete rows (which will be ignored)
-#' @param maxleafs maximum number of items in each leaf node (nanoflann suggests between 10 and 50, defaulting to 10)
+#' @param maxleaf maximum number of items in each leaf node (nanoflann suggests between 10 and 50, defaulting to 10)
 #'
 #' @details Returns \code{df} with additional class "flanner" and any attributes
 #' required to make efficient nearest neighbour lookups using
-#' \code{\link{knn.lookup.index}} or \code{\link{knn.lookup.values}}.
+#' \code{\link{knn_lookup_rows}} or \code{\link{knn_lookup}}.
 #'
 #' Any rows containing NA are ignored, but row numbers produced by lookup
 #' functions will take NA values into account when computing indices (that is to
@@ -58,6 +58,7 @@ flanner <- function( df, cols=NULL
     #
     df2 <- if(!is.null(cols)) df[,cols,drop=FALSE] else df
     cols <- maybe(cols, colnames(df2))
+    if(length(cols) < 1) stop("Spatial index must be built with respect to at least one column!")
     ## If df contains NA values (and we allow such) create a translation
     ## table translating from row numbers of the NA-free data.frame to those
     ## ofthe original data.frame. NULL indicates no such lookup is required.
@@ -73,11 +74,16 @@ flanner <- function( df, cols=NULL
         fromDataFrame(df2, maxleaf)
     }
     #
-    class(df2) <- c("flanner", class(df2))
-    structure( df2
-             , flanner.lookup.table=index.lookup.table
-             , flanner.spatial.index=spatial.index
-             , flanner.columns=cols )
+    ## result <- structure( df
+    ##                    , flanner.lookup.table=index.lookup.table
+    ##                    , flanner.spatial.index=spatial.index
+    ##                    , flanner.columns=cols )
+    result <- copy(df)
+    setattr(result, "flanner.lookup.table", index.lookup.table)
+    setattr(result, "flanner.spatial.index", spatial.index)
+    setattr(result, "flanner.columns", cols)
+    class(result) <- c("flanner", class(df2))
+    result
 }
 
 #' Nearest neighbour rows
@@ -94,7 +100,7 @@ flanner <- function( df, cols=NULL
 #' the (possibly squared) euclidean (L^2) distances.
 #'
 #' @export
-knn.lookup.rows <- function( df, points, k
+knn_lookup_rows <- function( df, points, k
                            , ignore.colnames=FALSE
                            , square.distance=TRUE, ... ) {
     if(!inherits(df, "flanner")) {
@@ -134,7 +140,7 @@ knn.lookup.rows <- function( df, points, k
 #' as well as a column with distances if \code{distance.name} is non-null.
 #'
 #' @export
-knn.lookup <- function( df, points, k
+knn_lookup <- function( df, points, k
                       , ignore.colnames=FALSE
                       , square.distance=TRUE
                       , df.cols = NULL
@@ -142,7 +148,7 @@ knn.lookup <- function( df, points, k
                       , distance.name="distance" ) {
     columns <- maybe(attr(df, "flanner.columns"), colnames(df))
     #
-    neighbours <- knn.lookup.rows(df, points, k, ignore.colnames, square.distance)
+    neighbours <- knn_lookup_rows(df, points, k, ignore.colnames, square.distance)
     #
     keep.points.cols <- maybe(points.cols, if(!ignore.colnames) {
         setdiff(colnames(points), columns)
