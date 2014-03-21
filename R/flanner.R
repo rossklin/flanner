@@ -56,7 +56,7 @@ flanner <- function( df, cols=NULL
         return(df)
     }
     #
-    df2 <- if(!is.null(cols)) df[,cols,drop=FALSE] else df
+    df2 <- if(!is.null(cols)) as.data.table(df)[,cols,with=FALSE] else df
     cols <- maybe(cols, colnames(df2))
     if(length(cols) < 1) stop("Spatial index must be built with respect to at least one column!")
     ## If df contains NA values (and we allow such) create a translation
@@ -69,7 +69,7 @@ flanner <- function( df, cols=NULL
     }
     #
     spatial.index <- if(!is.null(index.lookup.table)) {
-        fromDataFrame(df2[complete.cases,drop=FALSE], maxleaf)
+        fromDataFrame(as.data.table(df2)[complete.cases,with=FALSE], maxleaf)
     } else {
         fromDataFrame(df2, maxleaf)
     }
@@ -79,10 +79,12 @@ flanner <- function( df, cols=NULL
     ##                    , flanner.spatial.index=spatial.index
     ##                    , flanner.columns=cols )
     result <- copy(df)
+    class(result) <- c("flanner", class(df2))
+    # NOTE: Needed in case of data.table
+    result <- copy(result)
     setattr(result, "flanner.lookup.table", index.lookup.table)
     setattr(result, "flanner.spatial.index", spatial.index)
     setattr(result, "flanner.columns", cols)
-    class(result) <- c("flanner", class(df2))
     result
 }
 
@@ -110,7 +112,7 @@ knn_lookup_rows <- function( df, points, k
     lookup.table <- attr(df, "flanner.lookup.table")
     spatial.index <- attr(df, "flanner.spatial.index")
     #
-    points2 <- if(ignore.colnames) points else points[,attr(df, "flanner.columns"),drop=FALSE]
+    points2 <- if(ignore.colnames) points else as.data.table(points)[,attr(df, "flanner.columns"),with=FALSE]
     neighbours <- lookupKNNDataFrame(spatial.index, points2, k)
     #
     if(!is.null(lookup.table)) {

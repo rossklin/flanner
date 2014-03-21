@@ -6,4 +6,6 @@
 #' @useDynLib flanner
 #' @exportPattern "^[[:alpha:]]+"
 #' @importFrom Rcpp evalCpp
+#'
+#' @import data.table
 NULL
