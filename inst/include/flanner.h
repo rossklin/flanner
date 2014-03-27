@@ -33,7 +33,7 @@
 #include <Rcpp.h>
 #include <vector>
 
-#ifdef _WIN32
+#if defined _WIN32 || __CYGWIN__
 typedef unsigned int windows_is_dumb;
 #else
 typedef size_t windows_is_dumb;
