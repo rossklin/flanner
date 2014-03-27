@@ -33,6 +33,12 @@
 #include <Rcpp.h>
 #include <vector>
 
+#ifdef _WIN32
+typedef unsigned int windows_is_dumb;
+#else
+typedef size_t windows_is_dumb;
+#endif
+
 using namespace std;
 using namespace Rcpp;
 using namespace nanoflann;

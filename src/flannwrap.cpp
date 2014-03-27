@@ -77,7 +77,7 @@ XPtr<FlannerIndexPair> fromDataFrame(vec2 df, const int maxleaf=10) {
 //[[Rcpp::export]]
 DataFrame lookupKNNDataFrame( XPtr<FlannerIndexPair> pair
                             , vec2 points
-                            , size_t k ) {
+                            , windows_is_dumb k ) {
     DataFrameIndex& index = pair->index;
     const size_t npoints = points[0].size();
     const size_t dim = points.size();
