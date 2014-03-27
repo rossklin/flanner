@@ -23,7 +23,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // lookupKNNDataFrame
-DataFrame lookupKNNDataFrame(XPtr<FlannerIndexPair> pair, vec2 points, size_t k);
+DataFrame lookupKNNDataFrame(XPtr<FlannerIndexPair> pair, vec2 points, windows_is_dumb k);
 RcppExport SEXP flanner_lookupKNNDataFrame(SEXP pairSEXP, SEXP pointsSEXP, SEXP kSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
@@ -31,7 +31,7 @@ BEGIN_RCPP
         Rcpp::RNGScope __rngScope;
         Rcpp::traits::input_parameter< XPtr<FlannerIndexPair> >::type pair(pairSEXP );
         Rcpp::traits::input_parameter< vec2 >::type points(pointsSEXP );
-        Rcpp::traits::input_parameter< size_t >::type k(kSEXP );
+        Rcpp::traits::input_parameter< windows_is_dumb >::type k(kSEXP );
         DataFrame __result = lookupKNNDataFrame(pair, points, k);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
