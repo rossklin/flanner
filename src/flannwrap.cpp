@@ -33,13 +33,13 @@
 #undef NDEBUG
 #endif
 
-#include <boost/config.hpp>
+//#include <boost/config.hpp>
+#include "../inst/include/flanner.h"
 
 #include <vector>
 #include <memory>
 
 //#include <RcppCommon.h>
-#include "../inst/include/flanner.h"
 
 using namespace Rcpp;
 using namespace std;
