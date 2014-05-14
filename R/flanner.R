@@ -152,14 +152,14 @@ knn_lookup <- function( df, points, k
     #
     neighbours <- knn_lookup_rows(df, points, k, ignore.colnames, square.distance)
     #
+    keep.df.cols <- maybe(df.cols, colnames(df))
     keep.points.cols <- maybe(points.cols, if(!ignore.colnames) {
-        setdiff(colnames(points), columns)
+        setdiff(colnames(points), union(columns, keep.df.cols))
     } else {
         colnames(points)[-seq_along(columns)]
     })
-    keep.df.cols <- maybe(df.cols, colnames(df))
     #
-    df2 <- df[neighbours, keep.df.cols]
+    df2 <- as.data.table(df)[neighbours, keep.df.cols, with=F]
     #
     cols.copy <- if(length(keep.points.cols)>0) rep(seq_len(nrow(points)), each=k)
     for(col in keep.points.cols) {
