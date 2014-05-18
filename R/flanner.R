@@ -79,9 +79,11 @@ flanner <- function( df, cols=NULL
     ##                    , flanner.spatial.index=spatial.index
     ##                    , flanner.columns=cols )
     result <- copy(df)
-    class(result) <- c("flanner", class(df2))
-    # NOTE: Needed in case of data.table
-    result <- copy(result)
+    ### TODO: I think class can be set with setattr, but not sure, whence the extra copy...
+    ### class(result) <- c("flanner", class(df))
+    ### NOTE: Needed in case of data.table
+    ### result <- copy(result)
+    setattr(result, "class", c("flanner", class(df)))
     setattr(result, "flanner.lookup.table", index.lookup.table)
     setattr(result, "flanner.spatial.index", spatial.index)
     setattr(result, "flanner.columns", cols)
