@@ -8,7 +8,5 @@ Authors@R: "Tilo Wiklund <tilo@wiklund.co> [aut, cre]"
 Description: Wrapper around FLANN for peforming (approximate) nearest neighbour
     queries.
 License: BSD_3_clause + file LICENSE
-Imports:
-    Rcpp (>= 0.11.0),
-    data.table
+Imports: Rcpp (>= 0.11.0), data.table
 LinkingTo: Rcpp
