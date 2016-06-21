@@ -129,7 +129,8 @@ knn_lookup_rows <- function( df, points, k
 
 #' Find nearest neighbour
 #'
-#' Lookup nearest neighbours data in a data.frame.
+#' Lookup nearest neighbours data in a data.frame. Modified by Ross
+#' Linscott so as.data.table does not destroy class attributes of df.
 #'
 #' @param df data.frame, preferably indexed using \code{flanner}, in which to look for neighbours
 #' @param points data.frame containing coordinates to lookup neighbours of
@@ -161,7 +162,7 @@ knn_lookup <- function( df, points, k
         colnames(points)[-seq_along(columns)]
     })
     #
-    df2 <- as.data.table(df)[neighbours, keep.df.cols, with=F]
+    df2 <- as.data.table(copy(df))[neighbours, keep.df.cols, with=F]
     #
     cols.copy <- if(length(keep.points.cols)>0) rep(seq_len(nrow(points)), each=k)
     for(col in keep.points.cols) {
